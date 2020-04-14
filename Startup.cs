@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Teste02.Infra;
+using Teste02.Services;
 
 namespace Teste02
 {
@@ -30,6 +31,8 @@ namespace Teste02
             services.AddDbContext<ApplicationContext>(x => x.UseSqlServer(Configuration.GetConnectionString("default")));
 
             IdentityConfiguration.ConfigureServices(services, Configuration);
+            services.AddScoped(typeof(UserManagementService), typeof(UserManagementService));
+
             services.AddControllers();
         }
 
