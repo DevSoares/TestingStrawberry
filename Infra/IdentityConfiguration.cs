@@ -54,6 +54,5 @@ namespace Teste02.Infra
                 };
             });
         }
-
     }
 }

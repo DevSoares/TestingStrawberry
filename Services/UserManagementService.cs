@@ -38,7 +38,8 @@ namespace Teste02.Services
         public async Task<IdentityResult> Create(UserRegisterViewModel registroUsuario)
         {
             IdentityResult result = new IdentityResult();
-            if (_identityContext.Find<IdentityUser>(registroUsuario.Email) != null)
+
+            if (_identityContext.Users.FirstOrDefault(u => u.Email == registroUsuario.Email) == null)
             {
                 var user = new IdentityUser
                 {
@@ -50,10 +51,13 @@ namespace Teste02.Services
                 result = await _userManager.CreateAsync(user, registroUsuario.Senha);
 
                 if (result.Succeeded)
+                {
                     await _signInManager.SignInAsync(user, false);
+                    var resultRole =  await _userManager.AddToRoleAsync(user, "Usuario");
+                }
             }
             else
-                result.Errors.Append(new IdentityError {Description = $"Email: {registroUsuario.Email} já cadastrado." });
+                result.Errors.Append(new IdentityError { Description = $"Email: {registroUsuario.Email} já cadastrado." });
 
             return result;
         }
